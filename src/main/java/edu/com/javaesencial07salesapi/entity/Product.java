@@ -4,6 +4,7 @@ package edu.com.javaesencial07salesapi.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,10 +13,12 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     @Column(name = "id_product")
     private Long idProduct;
 
@@ -30,5 +33,12 @@ public class Product {
 
     @Column(name = "product_enabled",nullable = false)
     private Boolean productEnabled;
+
+    // fk
+
+    @ManyToOne
+    @JoinColumn(name = "id_category", nullable = false
+    , foreignKey = @ForeignKey(name = "FK_PRODUCT_CATEGORY"))
+    private Category category;
 
 }

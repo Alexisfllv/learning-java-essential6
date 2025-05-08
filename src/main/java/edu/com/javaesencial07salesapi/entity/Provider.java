@@ -1,33 +1,32 @@
 package edu.com.javaesencial07salesapi.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "category")
+@Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Category {
+@Table(name = "provider")
+public class Provider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long idCategory;
+    private Long idProvider;
 
-    @Column(name = "category_name",nullable = false, length = 50)
-    private String categoryName;
+    @Column(nullable = false,length = 50)
+    private String providerName;
 
-    @Column(name = "category_description",nullable = false,length = 250)
-    private String categoryDescription;
+    @Column(nullable = false,length = 150)
+    private String providerAddress;
 
-    @Column(name = "category_enabled",nullable = false)
-    private boolean categoryEnabled;
+    @Column(nullable = false)
+    private boolean providerEnabled;
 
 
 }

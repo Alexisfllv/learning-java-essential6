@@ -23,16 +23,16 @@ public class Sale {
     private Long idSale;
 
 
-    @Column(nullable = false)
+    @Column( name = "sale_date_time",nullable = false)
     private LocalDateTime saleDateTime;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "sale_total",nullable = false, precision = 10, scale = 2)
     private BigDecimal saleTotal;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column( name = "sale_tax",nullable = false, precision = 10, scale = 2)
     private BigDecimal saleTax;
 
-    @Column(nullable = false)
+    @Column(name = "sale_enabled", nullable = false)
     private boolean saleEnabled;
 
     @ManyToOne

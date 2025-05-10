@@ -5,8 +5,6 @@ import edu.com.javaesencial07salesapi.entity.Product;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductService extends GenericService<Product,Long> {
 
-    // metodos
-    List<Product> ListProduct();
 }

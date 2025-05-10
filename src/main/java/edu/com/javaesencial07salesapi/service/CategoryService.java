@@ -5,13 +5,8 @@ import edu.com.javaesencial07salesapi.entity.Category;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface CategoryService extends GenericService<Category,Long> {
 
-    // CRUD
-    List<CategoryDTO> listAllCategory();
-    CategoryDTO findById(Long id);
-    CategoryDTO save (CategoryDTO categoryDTO);
-    CategoryDTO update(CategoryDTO categoryDTO , Long id);
-    void deleteById(Long id);
+
 
 }

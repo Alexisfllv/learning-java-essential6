@@ -2,9 +2,12 @@ package edu.com.javaesencial07salesapi.controller;
 
 
 import edu.com.javaesencial07salesapi.dto.category.CategoryDTO;
+import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
+import edu.com.javaesencial07salesapi.dto.category.Category_RDTO;
 import edu.com.javaesencial07salesapi.entity.Category;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,29 +20,33 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<Category>> listAllCategory(){
-        List<Category> categoryList = categoryService.listAll();
+    public ResponseEntity<List<Category_DTO>> listAllCategory(){
+        List<Category_DTO> categoryList = categoryService.listAll()
+                .stream()                                // clase == ClaseDto
+                .map(this::convertTODto)
+                .toList();
         return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Long id){
-        Category category = categoryService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(category);
+    public ResponseEntity<Category_DTO> findById(@PathVariable Long id){
+        Category obj = categoryService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(convertTODto(obj));
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(@RequestBody Category category){
-        Category cat = categoryService.save(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cat);
+    public ResponseEntity<Category_DTO> save(@RequestBody Category_DTO dto){
+        Category obj = categoryService.save(convertEntity(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertTODto(obj));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@RequestBody Category category, @PathVariable Long id){
-        Category cat = categoryService.update(category,id);
-        return ResponseEntity.status(HttpStatus.OK).body(cat);
+    public ResponseEntity<Category_DTO> update(@RequestBody Category_DTO dto, @PathVariable Long id){
+        Category obj = categoryService.update(convertEntity(dto),id);
+        return ResponseEntity.status(HttpStatus.OK).body(convertTODto(obj));
     }
 
     @DeleteMapping("/{id}")
@@ -47,4 +54,16 @@ public class CategoryController {
         categoryService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    // conversion de parametros  entiy,dto .  dto,entity
+
+    private Category_DTO convertTODto(Category category){
+        return modelMapper.map(category, Category_DTO.class);
+    }
+
+    private Category convertEntity(Category_DTO dto){
+        return modelMapper.map(dto, Category.class);
+    }
+
+
 }

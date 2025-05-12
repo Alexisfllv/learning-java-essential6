@@ -2,8 +2,10 @@ package edu.com.javaesencial07salesapi.controller;
 
 
 import edu.com.javaesencial07salesapi.dto.category.CategoryDTO;
+import edu.com.javaesencial07salesapi.entity.Category;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,31 +19,32 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> listAllCategory(){
-        List<CategoryDTO> categoryList = categoryService.listAllCategory();
-        return ResponseEntity.ok(categoryList);
+    public ResponseEntity<List<Category>> listAllCategory(){
+        List<Category> categoryList = categoryService.listAll();
+        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){
-        CategoryDTO categoryDTO = categoryService.findById(id);
-        return ResponseEntity.ok(categoryDTO);
+    public ResponseEntity<Category> findById(@PathVariable Long id){
+        Category category = categoryService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO){
-        CategoryDTO category = categoryService.save(categoryDTO);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<Category> save(@RequestBody Category category){
+        Category cat = categoryService.save(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cat);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> update(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
-        CategoryDTO category = categoryService.update(categoryDTO,id);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<Category> update(@RequestBody Category category, @PathVariable Long id){
+        Category cat = categoryService.update(category,id);
+        return ResponseEntity.status(HttpStatus.OK).body(cat);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
         categoryService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

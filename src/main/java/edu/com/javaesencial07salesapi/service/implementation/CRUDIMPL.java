@@ -18,7 +18,8 @@ public abstract class CRUDIMPL<T,ID> implements GenericService<T,ID> {
 
     @Override
     public T findById(ID id) {
-        return getRepo().findById(id).orElse(null);
+        return getRepo().findById(id)
+                .orElseThrow(() -> new RuntimeException("ITEM NO ENCONTRADO"));
     }
 
     @Override

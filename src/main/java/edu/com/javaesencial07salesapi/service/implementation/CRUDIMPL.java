@@ -1,5 +1,6 @@
 package edu.com.javaesencial07salesapi.service.implementation;
 
+import edu.com.javaesencial07salesapi.exception.ModelNotFoundException;
 import edu.com.javaesencial07salesapi.repo.GenericRepo;
 import edu.com.javaesencial07salesapi.service.GenericService;
 
@@ -19,7 +20,7 @@ public abstract class CRUDIMPL<T,ID> implements GenericService<T,ID> {
     @Override
     public T findById(ID id) {
         return getRepo().findById(id)
-                .orElseThrow(() -> new RuntimeException("ITEM NO ENCONTRADO"));
+                .orElseThrow(() -> new ModelNotFoundException("ITEM NO ENCONTRADO : "+id));
     }
 
     @Override

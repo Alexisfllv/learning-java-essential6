@@ -5,10 +5,12 @@ import edu.com.javaesencial07salesapi.dto.category.CategoryDTO;
 import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
 import edu.com.javaesencial07salesapi.dto.category.Category_RDTO;
 import edu.com.javaesencial07salesapi.entity.Category;
+import edu.com.javaesencial07salesapi.mapper.CategoryMapper;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    //
+    @Qualifier("categoryMapper")
     private final ModelMapper modelMapper;
 
     @GetMapping

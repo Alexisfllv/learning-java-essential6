@@ -35,6 +35,8 @@ public abstract class CRUDIMPL<T,ID> implements GenericService<T,ID> {
 
     @Override
     public void deleteById(ID id) {
+        getRepo().findById(id)
+                .orElseThrow(() -> new ModelNotFoundException("ITEM NO ENCONTRADO : "+id));
         getRepo().deleteById(id);
     }
 }

@@ -19,7 +19,7 @@ public class Category_DTO {
     @NotEmpty
     @NotBlank
     @Size(min = 3, max = 50)
-    private String categoryName;
+    private String nombreCortoCategory;
 
     @NotNull
     @Size(min = 3, max = 250)

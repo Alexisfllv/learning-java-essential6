@@ -6,6 +6,7 @@ import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
 import edu.com.javaesencial07salesapi.dto.category.Category_RDTO;
 import edu.com.javaesencial07salesapi.entity.Category;
 import edu.com.javaesencial07salesapi.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -38,13 +39,13 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category_DTO> save(@RequestBody Category_DTO dto){
+    public ResponseEntity<Category_DTO> save(@Valid @RequestBody Category_DTO dto){
         Category obj = categoryService.save(convertEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(convertTODto(obj));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category_DTO> update(@RequestBody Category_DTO dto, @PathVariable Long id){
+    public ResponseEntity<Category_DTO> update(@Valid @RequestBody Category_DTO dto, @PathVariable Long id){
         Category obj = categoryService.update(convertEntity(dto),id);
         return ResponseEntity.status(HttpStatus.OK).body(convertTODto(obj));
     }

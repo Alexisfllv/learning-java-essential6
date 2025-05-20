@@ -7,6 +7,7 @@ import edu.com.javaesencial07salesapi.dto.category.Category_RDTO;
 import edu.com.javaesencial07salesapi.entity.Category;
 import edu.com.javaesencial07salesapi.mapper.CategoryMapper;
 import edu.com.javaesencial07salesapi.service.CategoryService;
+import edu.com.javaesencial07salesapi.util.MapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,34 +25,30 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     //
-    @Qualifier("categoryMapper")
-    private final ModelMapper modelMapper;
+    private final MapperUtil mapperUtil;
 
     @GetMapping
     public ResponseEntity<List<Category_DTO>> listAllCategory(){
-        List<Category_DTO> categoryList = categoryService.listAll()
-                .stream()                                // clase == ClaseDto
-                .map(this::convertTODto)
-                .toList();
-        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
+        List<Category_DTO> lists = mapperUtil.mapList(categoryService.listAll(), Category_DTO.class,"categoryMapper");
+        return  ResponseEntity.status(HttpStatus.OK).body(lists);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Category_DTO> findById(@PathVariable Long id){
         Category obj = categoryService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(convertTODto(obj));
+        return ResponseEntity.status(HttpStatus.OK).body(mapperUtil.map(obj, Category_DTO.class,"categoryMapper"));
     }
 
     @PostMapping
     public ResponseEntity<Category_DTO> save(@Valid @RequestBody Category_DTO dto){
-        Category obj = categoryService.save(convertEntity(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertTODto(obj));
+        Category obj = categoryService.save(mapperUtil.map(dto, Category.class,"categoryMapper"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapperUtil.map(obj, Category_DTO.class,"categoryMapper"));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Category_DTO> update(@Valid @RequestBody Category_DTO dto, @PathVariable Long id){
-        Category obj = categoryService.update(convertEntity(dto),id);
-        return ResponseEntity.status(HttpStatus.OK).body(convertTODto(obj));
+        Category obj = categoryService.update(mapperUtil.map(dto, Category.class,"categoryMapper"),id);
+        return ResponseEntity.status(HttpStatus.OK).body(mapperUtil.map(obj, Category_DTO.class,"categoryMapper"));
     }
 
     @DeleteMapping("/{id}")
@@ -62,13 +59,13 @@ public class CategoryController {
 
     // conversion de parametros  entiy,dto .  dto,entity
 
-    private Category_DTO convertTODto(Category category){
-        return modelMapper.map(category, Category_DTO.class);
-    }
-
-    private Category convertEntity(Category_DTO dto){
-        return modelMapper.map(dto, Category.class);
-    }
+//    private Category_DTO convertTODto(Category category){
+//        return modelMapper.map(category, Category_DTO.class);
+//    }
+//
+//    private Category convertEntity(Category_DTO dto){
+//        return modelMapper.map(dto, Category.class);
+//    }
 
 
 }

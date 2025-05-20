@@ -17,7 +17,7 @@ import java.util.List;
 public class CategoryServiceImpl extends CRUDIMPL<Category,Long> implements CategoryService {
 
     private final CategoryRepo categoryRepo;
-    private final CategoryMapper categoryMapper;
+
 
     @Override
     protected GenericRepo<Category, Long> getRepo() {

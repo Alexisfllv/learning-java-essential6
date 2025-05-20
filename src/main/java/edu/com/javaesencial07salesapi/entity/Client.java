@@ -31,10 +31,10 @@ public class Client {
     @Column(nullable = false,length = 10)
     private String clientPhoneNumber;
 
-    @Column(nullable = false,length = 10)
+    @Column(nullable = false,length = 100)
     private String clientEmail;
 
-    @Column(nullable = false,length = 10)
+    @Column(nullable = false,length = 100)
     private String clientAddress;
 
 

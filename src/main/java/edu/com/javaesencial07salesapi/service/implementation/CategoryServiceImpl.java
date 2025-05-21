@@ -25,47 +25,17 @@ public class CategoryServiceImpl extends CRUDIMPL<Category,Long> implements Cate
     }
 
 
-//    @Override
-//    public List<CategoryDTO> listAllCategory() {
-//       List<Category> categoryList = categoryRepo.findAll();
-//
-//       return categoryList.stream()
-//               .map(category -> categoryMapper.toCategoryDTO(category))
-//               .toList();
-//    }
-//
-//    @Override
-//    public CategoryDTO findById(Long id) {
-//        Category category = categoryRepo.findById(id)
-//                .orElseThrow(()-> new RuntimeException("dont exists id : "+id));
-//
-//        return categoryMapper.toCategoryDTO(category);
-//    }
-//
-//    @Override
-//    public CategoryDTO save(CategoryDTO categoryDTO) {
-//        Category category =  categoryMapper.toCategory(categoryDTO);
-//        category = categoryRepo.save(category);
-//        return categoryMapper.toCategoryDTO(category);
-//    }
-//
-//    @Override
-//    public CategoryDTO update(CategoryDTO categoryDTO, Long id) {
-//        Category categoryExist = categoryRepo.findById(id)
-//                .orElseThrow(()-> new RuntimeException("dont exists id : "+id));
-//
-//        categoryExist.setCategoryName(categoryDTO.categoryName());
-//        categoryExist.setCategoryDescription(categoryDTO.categoryDescription());
-//        categoryExist.setCategoryEnabled(categoryDTO.categoryEnabled());
-//        categoryRepo.save(categoryExist);
-//        return categoryMapper.toCategoryDTO(categoryExist);
-//    }
-//
-//    @Override
-//    public void deleteById(Long id) {
-//        Category categoryExist = categoryRepo.findById(id)
-//                .orElseThrow(()-> new RuntimeException("dont exists id : "+id));
-//
-//        categoryRepo.delete(categoryExist);
-//    }
+    @Override
+    public List<Category> findByCategoryName(String name) {
+        return categoryRepo.findByCategoryName(name);
+    }
+
+    @Override
+    public List<Category> findByCategoryDescriptionLike(String texto) {
+        return categoryRepo.findByCategoryDescriptionLike("%" + texto + "%");    }
+
+    @Override
+    public List<Category> getNameAndDescription(String name, String desc) {
+        return categoryRepo.getNameAndDescription(name, desc);
+    }
 }

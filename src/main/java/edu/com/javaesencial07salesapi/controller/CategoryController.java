@@ -57,6 +57,30 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+
+    // busqueda por nombre query derivada
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Category_DTO>> searchByName(@PathVariable("name") String name){
+        List<Category_DTO> lists = mapperUtil.mapList(categoryService.findByCategoryName(name), Category_DTO.class,"categoryMapper");
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    // busqueda para textos en la descripcion
+    @GetMapping("/description/{texto}")
+    public ResponseEntity<List<Category_DTO>> searchByDescription(@PathVariable("texto") String texto){
+        List<Category_DTO> lists = mapperUtil.mapList(categoryService.findByCategoryDescriptionLike(texto), Category_DTO.class,"categoryMapper");
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    // buscada de nombre y descripcion con jpq
+    @GetMapping("/busquedajqp")
+    public ResponseEntity<List<Category_DTO>> searchByNameAndDescription(@RequestParam("name") String name, @RequestParam("description") String description){
+        List<Category_DTO> lists = mapperUtil.mapList(categoryService.getNameAndDescription(name,description), Category_DTO.class,"categoryMapper");
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+
+
     // conversion de parametros  entiy,dto .  dto,entity
 
 //    private Category_DTO convertTODto(Category category){

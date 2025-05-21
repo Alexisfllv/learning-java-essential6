@@ -8,5 +8,15 @@ import java.util.List;
 public interface CategoryService extends GenericService<Category,Long> {
 
 
+    // listado derivado
+    List<Category> findByCategoryName(String name);
+
+    // listado de palabras clave
+    List<Category> findByCategoryDescriptionLike(String texto);
+
+
+    // JPQL Querys
+    List<Category> getNameAndDescription(String name, String desc);
+
 
 }

@@ -21,4 +21,19 @@ public class ProductServiceImpl extends CRUDIMPL<Product,Long> implements Produc
     protected GenericRepo<Product, Long> getRepo() {
         return productRepo;
     }
+
+    @Override
+    public List<Product> getProductsByCategory(String name) {
+        return productRepo.getProductsByCategory(name);
+    }
+
+    @Override
+    public List<Product> listadodeProductos() {
+        return productRepo.listadodeProductos();
+    }
+
+    @Override
+    public List<Product> buscarPorDescripcion(String desc) {
+        return productRepo.buscarPorDescripcion("%" + desc + "%");
+    }
 }

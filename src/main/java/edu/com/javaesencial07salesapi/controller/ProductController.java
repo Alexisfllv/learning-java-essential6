@@ -54,6 +54,26 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    //
+    @GetMapping("/scan/category")
+    public ResponseEntity<List<Product_DTO>> listAllProductByCategory(@RequestParam String name){
+        List<Product_DTO> lists = mapperUtil.mapList(productService.getProductsByCategory(name), Product_DTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    @GetMapping("/listado")
+    public ResponseEntity<List<Product_DTO>> listProduct(){
+        List<Product_DTO> lists = mapperUtil.mapList(productService.listAll(), Product_DTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    @GetMapping("/scan/desc")
+    public ResponseEntity<List<Product_DTO>> listAllProductByDesc(@RequestParam String name){
+        List<Product_DTO> lists = mapperUtil.mapList(productService.buscarPorDescripcion(name), Product_DTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+
     // conversion de parametros  entiy,dto .  dto,entity
 //
 //    private Product_DTO convertTODto(Product product){

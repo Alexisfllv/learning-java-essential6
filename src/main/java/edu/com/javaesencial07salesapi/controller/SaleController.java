@@ -3,6 +3,8 @@ package edu.com.javaesencial07salesapi.controller;
 
 
 import edu.com.javaesencial07salesapi.dto.sale.Sale_DTO;
+import edu.com.javaesencial07salesapi.dto.sale.Venta;
+import edu.com.javaesencial07salesapi.dto.sale.Venta_DTO;
 import edu.com.javaesencial07salesapi.entity.Sale;
 import edu.com.javaesencial07salesapi.service.SaleService;
 import edu.com.javaesencial07salesapi.util.MapperUtil;
@@ -52,6 +54,23 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/ventas")
+    public ResponseEntity<List<Venta_DTO>> listadoVentas(){
+        List<Venta_DTO> ventas =  saleService.Ventas();
+        return ResponseEntity.status(HttpStatus.OK).body(ventas);
+    }
+
+    @GetMapping("/ventas2")
+    public ResponseEntity<List<Venta>> listadoVentas2(){
+        List<Venta> ventas =  saleService.Ventas2();
+        return ResponseEntity.status(HttpStatus.OK).body(ventas);
+    }
+
+    @PostMapping("/alltrue")
+    public ResponseEntity<Void> allTrue(){
+        saleService.convertirSale();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 
 

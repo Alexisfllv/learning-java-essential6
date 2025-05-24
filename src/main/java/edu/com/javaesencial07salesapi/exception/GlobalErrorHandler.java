@@ -1,5 +1,6 @@
 package edu.com.javaesencial07salesapi.exception;
 
+import edu.com.javaesencial07salesapi.apiresponse.GenResponse;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -24,12 +26,20 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    // dato no encontrado
+    // dato no encontrado VERSION 1
+//    @ExceptionHandler(ModelNotFoundException.class)
+//    public ResponseEntity<CustomErrorResponse> handleModelNotFoundException(ModelNotFoundException ex , WebRequest req){
+//        CustomErrorResponse error = new CustomErrorResponse
+//                (LocalDateTime.now(), ex.getMessage(),req.getDescription(false));
+//        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+//    }
+
+    // genre VERSION 2 CON RESPONSE
     @ExceptionHandler(ModelNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse> handleModelNotFoundException(ModelNotFoundException ex , WebRequest req){
+    public ResponseEntity<GenResponse<CustomErrorResponse>> handleModelNotFoundException(ModelNotFoundException ex , WebRequest req){
         CustomErrorResponse error = new CustomErrorResponse
                 (LocalDateTime.now(), ex.getMessage(),req.getDescription(false));
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new GenResponse<>(400, "error", Arrays.asList(error)), HttpStatus.NOT_FOUND);
     }
 
 //    // datos mal enviados @Valid

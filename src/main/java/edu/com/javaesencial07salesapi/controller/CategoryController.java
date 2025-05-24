@@ -1,6 +1,7 @@
 package edu.com.javaesencial07salesapi.controller;
 
 
+import edu.com.javaesencial07salesapi.apiresponse.GenResponse;
 import edu.com.javaesencial07salesapi.dto.category.CategoryDTO;
 import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
 import edu.com.javaesencial07salesapi.dto.category.Category_RDTO;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,15 +30,16 @@ public class CategoryController {
     private final MapperUtil mapperUtil;
 
     @GetMapping
-    public ResponseEntity<List<Category_DTO>> listAllCategory(){
+    public ResponseEntity<GenResponse<Category_DTO>> listAllCategory(){
         List<Category_DTO> lists = mapperUtil.mapList(categoryService.listAll(), Category_DTO.class,"categoryMapper");
-        return  ResponseEntity.status(HttpStatus.OK).body(lists);
+        return  ResponseEntity.ok(new GenResponse<>(200, "success",lists));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category_DTO> findById(@PathVariable Long id){
+    public ResponseEntity<GenResponse<Category_DTO>> findById(@PathVariable Long id){
         Category obj = categoryService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(mapperUtil.map(obj, Category_DTO.class,"categoryMapper"));
+        Category_DTO ct =  mapperUtil.map(obj, Category_DTO.class,"categoryMapper");
+        return ResponseEntity.ok(new GenResponse<>(200, "success", Arrays.asList(ct)));
     }
 
     @PostMapping

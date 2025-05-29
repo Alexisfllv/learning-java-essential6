@@ -2,8 +2,11 @@ package edu.com.javaesencial07salesapi.service.implementation;
 
 
 import edu.com.javaesencial07salesapi.dto.sale.*;
+import edu.com.javaesencial07salesapi.dto.sale_detail.ProductSalesDTO;
 import edu.com.javaesencial07salesapi.entity.Sale;
+import edu.com.javaesencial07salesapi.entity.SaleDetail;
 import edu.com.javaesencial07salesapi.exception.ModelNotFoundException;
+import edu.com.javaesencial07salesapi.repo.SaleDetailRepo;
 import edu.com.javaesencial07salesapi.repo.SaleRepo;
 import edu.com.javaesencial07salesapi.repo.GenericRepo;
 import edu.com.javaesencial07salesapi.service.SaleService;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 public class SaleServiceImpl extends CRUDIMPL<Sale,Long> implements SaleService {
 
     private final SaleRepo saleRepo;
+    private final SaleDetailRepo saleDetailRepo;
 
 
     @Override
@@ -130,6 +134,21 @@ public class SaleServiceImpl extends CRUDIMPL<Sale,Long> implements SaleService 
                 // Por si no hay ventas, devolver algo por defecto o null
                 .orElse(null);
     }
+
+    public List<ProductSalesDTO> getProductSalesSummary() {
+        return saleDetailRepo.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        sd -> sd.getProduct().getProductName(),
+                        Collectors.summingInt(SaleDetail::getQuantity)
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> new ProductSalesDTO(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparing(ProductSalesDTO::totalQuantity).reversed()) // 👈 Orden descendente
+                .toList();
+    }
+
 
 
 }

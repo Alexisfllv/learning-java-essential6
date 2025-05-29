@@ -3,6 +3,7 @@ package edu.com.javaesencial07salesapi.controller;
 
 
 import edu.com.javaesencial07salesapi.dto.sale.*;
+import edu.com.javaesencial07salesapi.dto.sale_detail.ProductSalesDTO;
 import edu.com.javaesencial07salesapi.entity.Sale;
 import edu.com.javaesencial07salesapi.service.SaleService;
 import edu.com.javaesencial07salesapi.util.MapperUtil;
@@ -95,6 +96,13 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.OK).body(venta);
     }
 
+
+    // detail , cantidad mas vendida de producto
+    @GetMapping("/detailMostProduct")
+    public ResponseEntity<List<ProductSalesDTO>> detailMostProduct(){
+        List<ProductSalesDTO> venta = saleService.getProductSalesSummary();
+        return ResponseEntity.status(HttpStatus.OK).body(venta);
+    }
 
 
 }

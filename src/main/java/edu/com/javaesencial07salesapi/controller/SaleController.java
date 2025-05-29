@@ -2,9 +2,7 @@ package edu.com.javaesencial07salesapi.controller;
 
 
 
-import edu.com.javaesencial07salesapi.dto.sale.Sale_DTO;
-import edu.com.javaesencial07salesapi.dto.sale.Venta;
-import edu.com.javaesencial07salesapi.dto.sale.Venta_DTO;
+import edu.com.javaesencial07salesapi.dto.sale.*;
 import edu.com.javaesencial07salesapi.entity.Sale;
 import edu.com.javaesencial07salesapi.service.SaleService;
 import edu.com.javaesencial07salesapi.util.MapperUtil;
@@ -70,6 +68,31 @@ public class SaleController {
     public ResponseEntity<Void> allTrue(){
         saleService.convertirSale();
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    // maximo
+    @GetMapping("/max")
+    public ResponseEntity<Sale_DTO> max(){
+        Sale_DTO venta = mapperUtil.map(saleService.getSaleWithMoreCost(), Sale_DTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(venta);
+    }
+
+    @GetMapping("/maxVendedorUser")
+    public ResponseEntity<MaxVendorUser_DTO> maxVendedorUser(){
+        MaxVendorUser_DTO venta = saleService.getBestSellerman();
+        return ResponseEntity.status(HttpStatus.OK).body(venta);
+    }
+
+    @GetMapping("/maxCountUser")
+    public ResponseEntity<MaxCountVendorUser_DTO> maxCountUser(){
+        MaxCountVendorUser_DTO venta = saleService.getBestSellermanWithMaxCount();
+        return ResponseEntity.status(HttpStatus.OK).body(venta);
+    }
+
+    @GetMapping("/maxSeller")
+    public ResponseEntity<SellerStatsDTO> maxSeller(){
+        SellerStatsDTO venta = saleService.getSellerStats();
+        return ResponseEntity.status(HttpStatus.OK).body(venta);
     }
 
 

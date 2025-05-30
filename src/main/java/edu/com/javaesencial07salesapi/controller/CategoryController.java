@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +83,32 @@ public class CategoryController {
     public ResponseEntity<List<Category_DTO>> searchByNameAndDescription(@RequestParam("name") String name, @RequestParam("description") String description){
         List<Category_DTO> lists = mapperUtil.mapList(categoryService.getNameAndDescription(name,description), Category_DTO.class,"categoryMapper");
         return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Category_DTO>> findPage(Pageable pageable){
+        Page<Category_DTO> page = categoryService.findPage(pageable).map(category -> mapperUtil.map(category, Category_DTO.class,"categoryMapper"));
+
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/pagination2")
+    public ResponseEntity<Page<Category_DTO>> findPage2(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ){
+        Page<Category_DTO> pageDTO = categoryService.findPage(PageRequest.of(page,size)).map(category -> mapperUtil.map(category, Category_DTO.class,"categoryMapper"));
+
+        return ResponseEntity.ok(pageDTO);
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<Category_DTO>> findOrderByName(
+            @RequestParam(name = "param", defaultValue = "ASC") String param
+    ) {
+        List<Category_DTO> lists = mapperUtil.mapList(categoryService.listadodeCategorys(param), Category_DTO.class,"categoryMapper");
+
+        return ResponseEntity.ok(lists);
     }
 
 

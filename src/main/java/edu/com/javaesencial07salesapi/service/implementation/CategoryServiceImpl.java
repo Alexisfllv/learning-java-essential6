@@ -8,6 +8,9 @@ import edu.com.javaesencial07salesapi.repo.CategoryRepo;
 import edu.com.javaesencial07salesapi.repo.GenericRepo;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +40,19 @@ public class CategoryServiceImpl extends CRUDIMPL<Category,Long> implements Cate
     @Override
     public List<Category> getNameAndDescription(String name, String desc) {
         return categoryRepo.getNameAndDescription(name, desc);
+    }
+
+    @Override
+    public Page<Category> findPage(Pageable pageable) {
+        return categoryRepo.findAll(pageable);
+
+    }
+
+    @Override
+    public List<Category> listadodeCategorys(String param) {
+
+        Sort.Direction direction = param.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return categoryRepo.findAll(Sort.by(direction,"categoryName"));
     }
 }

@@ -135,6 +135,7 @@ public class SaleServiceImpl extends CRUDIMPL<Sale,Long> implements SaleService 
                 .orElse(null);
     }
 
+    @Override
     public List<ProductSalesDTO> getProductSalesSummary() {
         return saleDetailRepo.findAll()
                 .stream()

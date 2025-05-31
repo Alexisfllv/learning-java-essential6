@@ -45,7 +45,6 @@ public class CategoryServiceImpl extends CRUDIMPL<Category,Long> implements Cate
     @Override
     public Page<Category> findPage(Pageable pageable) {
         return categoryRepo.findAll(pageable);
-
     }
 
     @Override

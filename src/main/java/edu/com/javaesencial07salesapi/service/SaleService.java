@@ -30,7 +30,6 @@ public interface SaleService extends GenericService<Sale,Long> {
     SellerStatsDTO getSellerStats();
 
     // Producto mayor vendido - sale detail
-
     List<ProductSalesDTO> getProductSalesSummary();
 
 }

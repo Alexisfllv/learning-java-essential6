@@ -84,7 +84,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    void shouldReturnAllCategoriesSuccessfully() throws Exception {
+    void givenCategoriesExist_whenGetAll_thenReturnsCategoryList() throws Exception {
         // ✅ Nombres descriptivos ayudan a saber qué se prueba
         List<Category> list = Arrays.asList(category1, category2, category3);
         List<Category_DTO> dtoList = Arrays.asList(dto1, dto2, dto3);
@@ -100,7 +100,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    void shouldReturnCategoryByIdSuccessfully() throws Exception {
+    void givenValidCategoryId_whenGetById_thenReturnsCategory() throws Exception {
         final Long id = 1L;
 
         Mockito.when(categoryService.findById(id)).thenReturn(category1);
@@ -118,7 +118,7 @@ public class CategoryControllerTest {
 
     @Test
     // para crear una category prueba
-    void shouldCreateCategorySuccessfully() throws Exception {
+    void givenValidCategoryDtoWithoutId_whenCreate_thenReturnsCreatedCategory() throws Exception {
 
         // Crear un DTO sin ID para simular POST
         Category_DTO dtoSinId = new Category_DTO( null,"Ropa",
@@ -183,7 +183,7 @@ public class CategoryControllerTest {
 
     // test update error
     @Test
-    void shouldUpdateCategoryError() throws Exception {
+    void givenInvalidCategoryId_whenUpdate_thenReturnsNotFound() throws Exception {
         final Long id = 99L;
 
         Category categoryMod = new Category(3L, "Mineral", "Minerales", true);
@@ -209,7 +209,7 @@ public class CategoryControllerTest {
 
     // test para eliminar
     @Test
-    void shouldDeleteCategorySuccessfully() throws Exception {
+    void givenValidCategoryId_whenDelete_thenReturnsNoContent() throws Exception {
         final Long id = 3L;
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -223,7 +223,7 @@ public class CategoryControllerTest {
 
     // test not found
     @Test
-    void shouldDeleteCategoryError() throws Exception {
+    void givenNonExistentCategoryId_whenDelete_thenReturnsNotFound() throws Exception {
         final Long id = 99L;
 
         Mockito.doThrow(new ModelNotFoundException("category not found"))

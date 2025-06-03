@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 // statics
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.times;
@@ -33,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @WebMvcTest(CategoryController.class)
 public class CategoryControllerTest {
-
 
     @Autowired
     private MockMvc mockMvc;
@@ -178,7 +175,6 @@ public class CategoryControllerTest {
         Mockito.verify(mapperUtil).map(dtoEntrada, Category.class, "categoryMapper");
         Mockito.verify(categoryService).update(categoryMod, id);
         Mockito.verify(mapperUtil).map(categoryMod, Category_DTO.class, "categoryMapper");
-
     }
 
     // test update error
@@ -204,7 +200,6 @@ public class CategoryControllerTest {
                         .andExpect(status().isNotFound());
 
         Mockito.verify(categoryService).update(Mockito.any(Category.class), Mockito.eq(id));
-
     }
 
     // test para eliminar
@@ -218,7 +213,6 @@ public class CategoryControllerTest {
                 .andExpect(status().isNoContent());
 
         Mockito.verify(categoryService).deleteById(id);
-
     }
 
     // test not found
@@ -234,12 +228,5 @@ public class CategoryControllerTest {
                 )
                         .andExpect(status().isNotFound());
         Mockito.verify(categoryService).deleteById(id);
-
     }
-
-
-
-
-
-
 }

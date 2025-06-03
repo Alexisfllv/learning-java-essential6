@@ -49,8 +49,6 @@ public class CategoryServiceTest {
 
         category3 = new Category(3L, "Ropa",
                 "Ropa y accesorios para hombres, mujeres y niños.", false);
-        //
-        //List<Category> categories = Arrays.asList(category1, category2, category3);
 
     }
 
@@ -101,9 +99,7 @@ public class CategoryServiceTest {
         verify(categoryRepo).findById(invalidId);
     }
 
-
     // test de guardar category
-
     @Test
     void givenValidCategory_whenSave_thenReturnsSavedCategory() throws Exception {
 

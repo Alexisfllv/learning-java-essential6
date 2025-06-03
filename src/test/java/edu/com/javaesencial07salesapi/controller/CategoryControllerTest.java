@@ -4,6 +4,7 @@ package edu.com.javaesencial07salesapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
 import edu.com.javaesencial07salesapi.entity.Category;
+import edu.com.javaesencial07salesapi.exception.ModelNotFoundException;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import edu.com.javaesencial07salesapi.util.MapperUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 // statics
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.times;
@@ -54,7 +56,6 @@ public class CategoryControllerTest {
     private Category_DTO dto1;
     private Category_DTO dto2;
     private Category_DTO dto3;
-    private Category_DTO sindto;
 
     private static final String BASE_URL = "/api/category"; // ✅ Ruta base reutilizable
 
@@ -119,7 +120,6 @@ public class CategoryControllerTest {
     // para crear una category prueba
     void shouldCreateCategorySuccessfully() throws Exception {
 
-        //
         // Crear un DTO sin ID para simular POST
         Category_DTO dtoSinId = new Category_DTO( null,"Ropa",
                 "Ropa y accesorios para hombres, mujeres y niños.", false);
@@ -178,6 +178,62 @@ public class CategoryControllerTest {
         Mockito.verify(mapperUtil).map(dtoEntrada, Category.class, "categoryMapper");
         Mockito.verify(categoryService).update(categoryMod, id);
         Mockito.verify(mapperUtil).map(categoryMod, Category_DTO.class, "categoryMapper");
+
+    }
+
+    // test update error
+    @Test
+    void shouldUpdateCategoryError() throws Exception {
+        final Long id = 99L;
+
+        Category categoryMod = new Category(3L, "Mineral", "Minerales", true);
+        // dto salida
+        Category_DTO dtoEntrada = new Category_DTO(3L, "Mineral", "Minerales", true);
+
+        // mapeo
+        Mockito.when(mapperUtil.map(dtoEntrada, Category.class, "categoryMapper")).thenReturn(categoryMod);
+
+        Mockito.when(categoryService.update(categoryMod, id))
+                        .thenThrow(new ModelNotFoundException("category not found"));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .put(BASE_URL + "/" + id)
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(dtoEntrada))
+                )
+                        .andExpect(status().isNotFound());
+
+        Mockito.verify(categoryService).update(Mockito.any(Category.class), Mockito.eq(id));
+
+    }
+
+    // test para eliminar
+    @Test
+    void shouldDeleteCategorySuccessfully() throws Exception {
+        final Long id = 3L;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete(BASE_URL + "/" + id)
+        )
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(categoryService).deleteById(id);
+
+    }
+
+    // test not found
+    @Test
+    void shouldDeleteCategoryError() throws Exception {
+        final Long id = 99L;
+
+        Mockito.doThrow(new ModelNotFoundException("category not found"))
+                .when(categoryService).deleteById(id);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete(BASE_URL + "/" + id)
+                )
+                        .andExpect(status().isNotFound());
+        Mockito.verify(categoryService).deleteById(id);
 
     }
 

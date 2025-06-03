@@ -39,7 +39,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<GenResponse<CustomErrorResponse>> handleModelNotFoundException(ModelNotFoundException ex , WebRequest req){
         CustomErrorResponse error = new CustomErrorResponse
                 (LocalDateTime.now(), ex.getMessage(),req.getDescription(false));
-        return new ResponseEntity<>(new GenResponse<>(400, "error", Arrays.asList(error)), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new GenResponse<>(404, "error", Arrays.asList(error)), HttpStatus.NOT_FOUND);
     }
 
 //    // datos mal enviados @Valid

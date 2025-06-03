@@ -1,10 +1,12 @@
 package edu.com.javaesencial07salesapi.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.com.javaesencial07salesapi.dto.category.Category_DTO;
 import edu.com.javaesencial07salesapi.entity.Category;
 import edu.com.javaesencial07salesapi.service.CategoryService;
 import edu.com.javaesencial07salesapi.util.MapperUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,10 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.modelmapper.internal.bytebuddy.matcher.ElementMatchers.is;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
 @WebMvcTest(CategoryController.class)
 public class CategoryControllerTest {
 
@@ -39,6 +43,9 @@ public class CategoryControllerTest {
     @MockitoBean
     private MapperUtil mapperUtil;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     // ✅ Extraemos valores comunes a atributos reutilizables
     private Category category1;
     private Category category2;
@@ -47,6 +54,7 @@ public class CategoryControllerTest {
     private Category_DTO dto1;
     private Category_DTO dto2;
     private Category_DTO dto3;
+    private Category_DTO sindto;
 
     private static final String BASE_URL = "/api/category"; // ✅ Ruta base reutilizable
 
@@ -106,6 +114,76 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$.data[0].categoryDescription").value("Productos relacionados con computadoras, teléfonos y otros dispositivos electrónicos."))
                 .andExpect(jsonPath("$.data[0].categoryEnabled").value(true));
     }
+
+    @Test
+    // para crear una category prueba
+    void shouldCreateCategorySuccessfully() throws Exception {
+
+        //
+        // Crear un DTO sin ID para simular POST
+        Category_DTO dtoSinId = new Category_DTO( null,"Ropa",
+                "Ropa y accesorios para hombres, mujeres y niños.", false);
+        // DTO =  ENTITY
+        Mockito.when(mapperUtil.map(dtoSinId, Category.class, "categoryMapper")).thenReturn(category3);
+        // save entity
+        Mockito.when(categoryService.save(category3)).thenReturn(category3);
+        // ENTITY = DTO
+        Mockito.when(mapperUtil.map(category3, Category_DTO.class, "categoryMapper")).thenReturn(dto3);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(dtoSinId))
+        )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idCategory").value(3L))
+                .andExpect(jsonPath("$.nombreCortoCategory").value("Ropa"))
+                .andExpect(jsonPath("$.categoryDescription").value("Ropa y accesorios para hombres, mujeres y niños."))
+                .andExpect(jsonPath("$.categoryEnabled").value(false));
+
+        // verify
+        verify(categoryService, times(1)).save(category3);
+        verify(mapperUtil).map(dtoSinId, Category.class, "categoryMapper");
+        verify(mapperUtil).map(category3, Category_DTO.class, "categoryMapper");
+    }
+
+    // test para modificar
+    @Test
+    void shouldUpdateCategorySuccessfully() throws Exception {
+        final Long id = 3L;
+
+        Category categoryMod = new Category(3L, "Mineral", "Minerales", true);
+        // dto salida
+        Category_DTO dtoEntrada = new Category_DTO(3L, "Mineral", "Minerales", true);
+
+        Category_DTO dtosalida = new Category_DTO( 3L,"Mineral", "Minerales", true);
+
+        // Mocks
+        Mockito.when(mapperUtil.map(dtoEntrada, Category.class, "categoryMapper")).thenReturn(categoryMod);
+        Mockito.when(categoryService.update(categoryMod, id)).thenReturn(categoryMod);
+        Mockito.when(mapperUtil.map(categoryMod, Category_DTO.class, "categoryMapper")).thenReturn(dtosalida);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .put(BASE_URL + "/" + id)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(dtoEntrada))
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idCategory").value(3L))
+                .andExpect(jsonPath("$.nombreCortoCategory").value("Mineral"))
+                .andExpect(jsonPath("$.categoryDescription").value("Minerales"))
+                .andExpect(jsonPath("$.categoryEnabled").value(true));
+
+        // Verificaciones (verify)
+        Mockito.verify(mapperUtil).map(dtoEntrada, Category.class, "categoryMapper");
+        Mockito.verify(categoryService).update(categoryMod, id);
+        Mockito.verify(mapperUtil).map(categoryMod, Category_DTO.class, "categoryMapper");
+
+    }
+
+
+
+
 
 
 }

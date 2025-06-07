@@ -56,6 +56,9 @@ public class WebSecurityConfig {
                         .authorizeHttpRequests(req -> req
                                 .requestMatchers(antMatcher("/login")).permitAll()
                                 .requestMatchers(antMatcher("/rest/**")).permitAll()
+                                .requestMatchers(antMatcher("/swagger-ui.html")).permitAll()
+                                .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(antMatcher("/v3/api-docs/**")).permitAll()
                                 .anyRequest().authenticated()
                         )
                         .exceptionHandling(e -> e

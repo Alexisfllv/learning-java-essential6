@@ -150,9 +150,4 @@ public class RestTemplateController {
 
         return "INVALID_TOKEN";
     }
-
-
-
-
-
 }
